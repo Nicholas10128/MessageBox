@@ -24,6 +24,14 @@ namespace GCT
             public GameObject m_YesOrNoAutoCloseSeconds;
             public GameObject m_YesOrNoAutoCloseDescription;
 
+            public bool isReady
+            {
+                get
+                {
+                    return m_IsReady;
+                }
+            }
+
             private StringBuilder m_StringBuilder = new StringBuilder();
 
             private Text m_ConfirmOnlyAutoCloseSecondsText;
@@ -34,6 +42,7 @@ namespace GCT
 
             private MessageBox.MessageInfo m_MessageInfo;
             private Canvas m_Canvas;
+            private bool m_IsReady = false;
 
 
             void Start()
@@ -63,6 +72,7 @@ namespace GCT
                 m_YesOrNoAutoCloseSecondsText = m_YesOrNoAutoCloseSeconds.GetComponent<Text>();
                 m_YesOrNoAutoCloseSecondsTextTMP = m_YesOrNoAutoCloseSeconds.GetComponent<TextMeshProUGUI>();
                 m_Canvas = GetComponent<Canvas>();
+                m_IsReady = true;
             }
 
             void Update()
@@ -91,7 +101,7 @@ namespace GCT
                         byte leftSeconds = (byte)Mathf.CeilToInt(m_MessageInfo.m_AutoClose - elapsed);
                         if (m_LastLeftSeconds != leftSeconds)
                         {
-                            m_StringBuilder.Append(m_LastLeftSeconds = leftSeconds);
+                            m_StringBuilder.Append(string.Format(m_MessageInfo.m_LeftSecondsFormatText, m_LastLeftSeconds = leftSeconds));
                             if (autoCloseSecondsText != null)
                             {
                                 autoCloseSecondsText.text = m_StringBuilder.ToString();
@@ -149,7 +159,7 @@ namespace GCT
                         {
                             m_ConfirmOnlyAutoCloseSeconds.SetActive(true);
                             m_ConfirmOnlyAutoCloseDescription.SetActive(true);
-                            m_StringBuilder.Append(m_LastLeftSeconds = m_MessageInfo.m_AutoClose);
+                            m_StringBuilder.Append(string.Format(m_MessageInfo.m_LeftSecondsFormatText, m_LastLeftSeconds = m_MessageInfo.m_AutoClose));
                             if (m_ConfirmOnlyAutoCloseSecondsText != null)
                             {
                                 m_ConfirmOnlyAutoCloseSecondsText.text = m_StringBuilder.ToString();
