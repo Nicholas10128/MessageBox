@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 namespace GCT
 {
@@ -30,6 +31,7 @@ namespace GCT
                 public string m_Caption;
                 public string m_Content;
                 public TextAnchor m_ContentAlignment;
+                public TextAlignmentOptions m_ContentAlignmentTMP;
                 public Callback m_Callback;
                 public object m_Parameter;
                 public byte m_AutoClose;
@@ -63,6 +65,21 @@ namespace GCT
                 m_MessageQueue.Enqueue(mi);
             }
 
+            public static void Show(string caption, string content, Type type, TextAlignmentOptions contentAlignment, Callback callback, object parameter)
+            {
+                MessageInfo mi = new MessageInfo();
+                mi.m_Caption = caption;
+                mi.m_Content = content;
+                mi.m_Type = type;
+                mi.m_ContentAlignmentTMP = contentAlignment;
+                mi.m_Callback = callback;
+                mi.m_Parameter = parameter;
+                mi.m_AutoClose = 0;
+                mi.m_Destroying = false;
+                mi.m_BeginTime = 0;
+                m_MessageQueue.Enqueue(mi);
+            }
+
             public static void Show(string caption, string content, TextAnchor contentAlignment, Callback callback, object parameter, byte autoCloseSeconds)
             {
                 MessageInfo mi = new MessageInfo();
@@ -70,6 +87,21 @@ namespace GCT
                 mi.m_Content = content;
                 mi.m_Type = Type.ConfirmOnly;
                 mi.m_ContentAlignment = contentAlignment;
+                mi.m_Callback = callback;
+                mi.m_Parameter = parameter;
+                mi.m_AutoClose = autoCloseSeconds;
+                mi.m_Destroying = false;
+                mi.m_BeginTime = 0;
+                m_MessageQueue.Enqueue(mi);
+            }
+
+            public static void Show(string caption, string content, TextAlignmentOptions contentAlignment, Callback callback, object parameter, byte autoCloseSeconds)
+            {
+                MessageInfo mi = new MessageInfo();
+                mi.m_Caption = caption;
+                mi.m_Content = content;
+                mi.m_Type = Type.ConfirmOnly;
+                mi.m_ContentAlignmentTMP = contentAlignment;
                 mi.m_Callback = callback;
                 mi.m_Parameter = parameter;
                 mi.m_AutoClose = autoCloseSeconds;

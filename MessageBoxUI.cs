@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace GCT
 {
@@ -10,6 +11,8 @@ namespace GCT
         {
             public Text m_Caption;
             public Text m_Content;
+            public TMP_Text m_CaptionTMP;
+            public TMP_Text m_ContentTMP;
 
             public GameObject ConfirmOnlyGroup;
             public GameObject YesOrNoGroup;
@@ -25,6 +28,8 @@ namespace GCT
 
             private Text m_ConfirmOnlyAutoCloseSecondsText;
             private Text m_YesOrNoAutoCloseSecondsText;
+            private TMP_Text m_ConfirmOnlyAutoCloseSecondsTextTMP;
+            private TMP_Text m_YesOrNoAutoCloseSecondsTextTMP;
             private byte m_LastLeftSeconds;
 
             private MessageBox.MessageInfo m_MessageInfo;
@@ -33,14 +38,30 @@ namespace GCT
 
             void Start()
             {
-                m_Caption.text = string.Empty;
-                m_Content.text = string.Empty;
+                if (m_Caption != null)
+                {
+                    m_Caption.text = string.Empty;
+                }
+                if (m_Content != null)
+                {
+                    m_Content.text = string.Empty;
+                }
+                if (m_CaptionTMP != null)
+                {
+                    m_CaptionTMP.text = string.Empty;
+                }
+                if (m_ContentTMP != null)
+                {
+                    m_ContentTMP.text = string.Empty;
+                }
                 ConfirmOnlyGroup.SetActive(false);
                 YesOrNoGroup.SetActive(false);
                 YesOrNoOrCancelGroup.SetActive(false);
                 NeverDisplayAgainGroup.SetActive(false);
                 m_ConfirmOnlyAutoCloseSecondsText = m_ConfirmOnlyAutoCloseSeconds.GetComponent<Text>();
+                m_ConfirmOnlyAutoCloseSecondsTextTMP = m_ConfirmOnlyAutoCloseSeconds.GetComponent<TextMeshProUGUI>();
                 m_YesOrNoAutoCloseSecondsText = m_YesOrNoAutoCloseSeconds.GetComponent<Text>();
+                m_YesOrNoAutoCloseSecondsTextTMP = m_YesOrNoAutoCloseSeconds.GetComponent<TextMeshProUGUI>();
                 m_Canvas = GetComponent<Canvas>();
             }
 
@@ -51,13 +72,16 @@ namespace GCT
                     if (m_MessageInfo.m_AutoClose > 0)
                     {
                         Text autoCloseSecondsText = null;
+                        TMP_Text autoCloseSecondsTextTMP = null;
                         switch (m_MessageInfo.m_Type)
                         {
                             case MessageBox.Type.ConfirmOnly:
                                 autoCloseSecondsText = m_ConfirmOnlyAutoCloseSecondsText;
+                                autoCloseSecondsTextTMP = m_ConfirmOnlyAutoCloseSecondsTextTMP;
                                 break;
                             case MessageBox.Type.YesOrNo:
                                 autoCloseSecondsText = m_YesOrNoAutoCloseSecondsText;
+                                autoCloseSecondsTextTMP = m_YesOrNoAutoCloseSecondsTextTMP;
                                 break;
                             default:
                                 Debug.LogError("Fatal error! m_MessageInfo.m_Type = " + m_MessageInfo.m_Type);
@@ -68,7 +92,14 @@ namespace GCT
                         if (m_LastLeftSeconds != leftSeconds)
                         {
                             m_StringBuilder.Append(m_LastLeftSeconds = leftSeconds);
-                            autoCloseSecondsText.text = m_StringBuilder.ToString();
+                            if (autoCloseSecondsText != null)
+                            {
+                                autoCloseSecondsText.text = m_StringBuilder.ToString();
+                            }
+                            if (autoCloseSecondsTextTMP != null)
+                            {
+                                autoCloseSecondsTextTMP.text = m_StringBuilder.ToString();
+                            }
                             m_StringBuilder.Clear();
                         }
                     }
@@ -83,9 +114,24 @@ namespace GCT
             public void OnOpen(MessageBox.MessageInfo mi)
             {
                 m_MessageInfo = mi;
-                m_Caption.text = m_MessageInfo.m_Caption;
-                m_Content.text = m_MessageInfo.m_Content;
-                m_Content.alignment = m_MessageInfo.m_ContentAlignment;
+                if (m_Caption != null)
+                {
+                    m_Caption.text = m_MessageInfo.m_Caption;
+                }
+                if (m_Content != null)
+                {
+                    m_Content.text = m_MessageInfo.m_Content;
+                    m_Content.alignment = m_MessageInfo.m_ContentAlignment;
+                }
+                if (m_CaptionTMP != null)
+                {
+                    m_CaptionTMP.text = m_MessageInfo.m_Caption;
+                }
+                if (m_ContentTMP != null)
+                {
+                    m_ContentTMP.text = m_MessageInfo.m_Content;
+                    m_ContentTMP.alignment = m_MessageInfo.m_ContentAlignmentTMP;
+                }
 
                 switch (m_MessageInfo.m_Type)
                 {
@@ -104,7 +150,14 @@ namespace GCT
                             m_ConfirmOnlyAutoCloseSeconds.SetActive(true);
                             m_ConfirmOnlyAutoCloseDescription.SetActive(true);
                             m_StringBuilder.Append(m_LastLeftSeconds = m_MessageInfo.m_AutoClose);
-                            m_ConfirmOnlyAutoCloseSecondsText.text = m_StringBuilder.ToString();
+                            if (m_ConfirmOnlyAutoCloseSecondsText != null)
+                            {
+                                m_ConfirmOnlyAutoCloseSecondsText.text = m_StringBuilder.ToString();
+                            }
+                            if (m_ConfirmOnlyAutoCloseSecondsTextTMP != null)
+                            {
+                                m_ConfirmOnlyAutoCloseSecondsTextTMP.text = m_StringBuilder.ToString();
+                            }
                             m_StringBuilder.Clear();
                             m_MessageInfo.m_BeginTime = Time.time;
                         }
@@ -124,7 +177,14 @@ namespace GCT
                             m_YesOrNoAutoCloseSeconds.SetActive(true);
                             m_YesOrNoAutoCloseDescription.SetActive(true);
                             m_StringBuilder.Append(m_LastLeftSeconds = m_MessageInfo.m_AutoClose);
-                            m_YesOrNoAutoCloseSecondsText.text = m_StringBuilder.ToString();
+                            if (m_YesOrNoAutoCloseSecondsText != null)
+                            {
+                                m_YesOrNoAutoCloseSecondsText.text = m_StringBuilder.ToString();
+                            }
+                            if (m_YesOrNoAutoCloseSecondsTextTMP != null)
+                            {
+                                m_YesOrNoAutoCloseSecondsTextTMP.text = m_StringBuilder.ToString();
+                            }
                             m_StringBuilder.Clear();
                             m_MessageInfo.m_BeginTime = Time.time;
                         }
