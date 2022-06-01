@@ -186,7 +186,7 @@ namespace GCT
                         {
                             m_YesOrNoAutoCloseSeconds.SetActive(true);
                             m_YesOrNoAutoCloseDescription.SetActive(true);
-                            m_StringBuilder.Append(m_LastLeftSeconds = m_MessageInfo.m_AutoClose);
+                            m_StringBuilder.Append(string.Format(m_MessageInfo.m_LeftSecondsFormatText, m_LastLeftSeconds = m_MessageInfo.m_AutoClose));
                             if (m_YesOrNoAutoCloseSecondsText != null)
                             {
                                 m_YesOrNoAutoCloseSecondsText.text = m_StringBuilder.ToString();
@@ -220,6 +220,12 @@ namespace GCT
                 OnClose();
             }
 
+            public void OnConfirmButtonAutoClick()
+            {
+                m_MessageInfo.m_Callback?.Invoke(MessageBox.ButtonID.Auto, m_MessageInfo.m_Parameter);
+                OnClose();
+            }
+
             public void OnCancelButtonClick()
             {
                 m_MessageInfo.m_Callback?.Invoke(MessageBox.ButtonID.Cancel, m_MessageInfo.m_Parameter);
@@ -229,6 +235,12 @@ namespace GCT
             public void OnCloseButtonClick()
             {
                 m_MessageInfo.m_Callback?.Invoke(MessageBox.ButtonID.Close, m_MessageInfo.m_Parameter);
+                OnClose();
+            }
+
+            public void OnCloseButtonAutoClick()
+            {
+                m_MessageInfo.m_Callback?.Invoke(MessageBox.ButtonID.Auto, m_MessageInfo.m_Parameter);
                 OnClose();
             }
 

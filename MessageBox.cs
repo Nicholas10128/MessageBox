@@ -20,7 +20,8 @@ namespace GCT
             {
                 Confirm,
                 Cancel,
-                Close
+                Close,
+                Auto
             }
 
             public delegate void Callback(ButtonID bid, object parameter);
@@ -93,12 +94,12 @@ namespace GCT
                 m_MessageQueue.Enqueue(mi);
             }
 
-            public static void Show(string caption, string content, TextAnchor contentAlignment, Callback callback, object parameter, string leftSecondsFormatText, byte autoCloseSeconds)
+            public static void Show(string caption, string content, Type type, TextAnchor contentAlignment, Callback callback, object parameter, string leftSecondsFormatText, byte autoCloseSeconds)
             {
                 MessageInfo mi = new MessageInfo();
                 mi.m_Caption = caption;
                 mi.m_Content = content;
-                mi.m_Type = Type.ConfirmOnly;
+                mi.m_Type = type;
                 mi.m_ContentAlignment = contentAlignment;
                 mi.m_Callback = callback;
                 mi.m_Parameter = parameter;
@@ -109,12 +110,12 @@ namespace GCT
                 m_MessageQueue.Enqueue(mi);
             }
 
-            public static void Show(string caption, string content, TextAlignmentOptions contentAlignment, Callback callback, object parameter, string leftSecondsFormatText, byte autoCloseSeconds)
+            public static void Show(string caption, string content, Type type, TextAlignmentOptions contentAlignment, Callback callback, object parameter, string leftSecondsFormatText, byte autoCloseSeconds)
             {
                 MessageInfo mi = new MessageInfo();
                 mi.m_Caption = caption;
                 mi.m_Content = content;
-                mi.m_Type = Type.ConfirmOnly;
+                mi.m_Type = type;
                 mi.m_ContentAlignmentTMP = contentAlignment;
                 mi.m_Callback = callback;
                 mi.m_Parameter = parameter;
@@ -134,7 +135,15 @@ namespace GCT
                         float elapsed = Time.time - m_CurrentMessage.m_BeginTime;
                         if (elapsed >= m_CurrentMessage.m_AutoClose)
                         {
-                            m_MessageBoxUICanvas.SendMessage("OnConfirmButtonClick");
+                            switch (m_CurrentMessage.m_Type)
+                            {
+                                case Type.ConfirmOnly:
+                                    m_MessageBoxUICanvas.SendMessage("OnConfirmButtonAutoClick");
+                                    break;
+                                case Type.YesOrNo:
+                                    m_MessageBoxUICanvas.SendMessage("OnCloseButtonAutoClick");
+                                    break;
+                            }
                         }
                     }
                     return;
